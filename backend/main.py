@@ -4,7 +4,7 @@ from datetime import date, timedelta
 from functools import lru_cache
 import requests, math, random, os
 app=FastAPI(title='股票島 API',version='1.0.0')
-origins=[s.strip() for s in os.getenv('CORS_ORIGINS','http://localhost:5173,http://127.0.0.1:5173').split(',') if s.strip()]
+origins=[s.strip() for s in os.getenv('CORS_ORIGINS','http://localhost:5173,http://127.0.0.1:5173,https://stock-island-web.onrender.com').split(',') if s.strip()]
 app.add_middleware(CORSMiddleware,allow_origins=origins,allow_methods=['GET'],allow_headers=['*'])
 STOCKS={'2330':'台積電','2308':'台達電','2317':'鴻海','2454':'聯發科','2603':'長榮','2618':'長榮航','0050':'元大台灣50','00878':'國泰永續高股息','00919':'群益台灣精選高息'}
 @app.get('/api/health')

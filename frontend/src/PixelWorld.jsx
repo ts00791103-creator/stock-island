@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 const places = [
   {name:'專業K線島',sub:'K線・均線・布林',key:'chart',kind:'castle',x:16,y:30},
@@ -29,11 +29,22 @@ function Island({kind}) {
  </svg>;
 }
 export default function PixelWorld({onPick}) {
+ const [selected,setSelected]=useState(null);
+ const enter=(p)=>{setSelected(p.name);onPick(p.key);};
  return <section aria-label="16-bit 經典遊戲股票島地圖" style={{position:'relative',isolation:'isolate',overflow:'hidden',border:'3px solid #65788a',borderRadius:8,background:'#153753',color:'#f0e8d3',padding:'18px 6px 20px',boxShadow:'inset 0 0 0 3px #0b2236'}}>
+ <style>{`@keyframes stockWave{0%{transform:translateX(0)}50%{transform:translateX(12px)}100%{transform:translateX(0)}}@keyframes stockSelect{0%{transform:scale(1)}45%{transform:scale(1.045)}100%{transform:scale(1)}}@media(prefers-reduced-motion:reduce){.stock-wave,.stock-island-active{animation:none!important}}`}</style>
+ <svg className="stock-wave" aria-hidden="true" viewBox="0 0 360 520" preserveAspectRatio="none" style={{position:'absolute',inset:0,width:'100%',height:'100%',opacity:.22,pointerEvents:'none',animation:'stockWave 12s ease-in-out infinite'}}>
+ <g fill="none" stroke="#78a2ac" strokeWidth="2" shapeRendering="crispEdges">
+ {Array.from({length:10},(_,i)=><path key={i} d={`M${15+(i%3)*18} ${45+i*49}h18v-4h18m65 15h16v-4h22m68 12h20v-4h15`}/>)}
+ </g></svg>
+ <svg aria-hidden="true" viewBox="0 0 360 440" preserveAspectRatio="none" style={{position:'absolute',left:0,top:'15%',width:'100%',height:'75%',opacity:.48,pointerEvents:'none'}}>
+ <g fill="none" stroke="#c4b48c" strokeWidth="1.5" strokeDasharray="3 7" strokeLinecap="square">
+ <path d="M80 115Q125 75 180 112T280 115"/><path d="M180 125Q140 190 124 282"/><path d="M180 125Q238 190 253 282"/><path d="M124 282Q188 317 253 282"/>
+ </g><g fill="#c4b48c"><path d="M177 115h6v6h-6zM121 279h6v6h-6zM250 279h6v6h-6z"/></g></svg>
  <div aria-hidden="true" style={{position:'absolute',inset:0,pointerEvents:'none',opacity:.55,backgroundImage:'linear-gradient(90deg,transparent 96%,#326080 97%,transparent 100%),linear-gradient(0deg,transparent 96%,#326080 97%,transparent 100%)',backgroundSize:'78px 78px'}}/>
- <header style={{position:'relative',zIndex:1,margin:'0 auto 12px',width:'fit-content',maxWidth:'95%',padding:'9px 18px',textAlign:'center',background:'#273c4d',border:'4px solid #b19a77',boxShadow:'4px 5px 0 #081a29',fontWeight:900,fontSize:22,letterSpacing:2}}>股票島 <span style={{fontSize:12,display:'block',letterSpacing:1,fontWeight:600,color:'#d6c9b3'}}>STOCK ISLAND · 16-BIT</span></header>
+ <header style={{position:'relative',zIndex:1,margin:'0 auto 12px',width:'fit-content',maxWidth:'95%',padding:'9px 18px',textAlign:'center',background:'#273c4d',border:'4px solid #b19a77',boxShadow:'4px 5px 0 #081a29',fontWeight:900,fontSize:22,letterSpacing:2}}>股票島 <span style={{fontSize:12,display:'block',letterSpacing:1,fontWeight:600,color:'#d6c9b3'}}>STOCK ISLAND V1.3 · 16-BIT</span></header>
  <div style={{position:'relative',zIndex:1,display:'grid',gridTemplateColumns:'repeat(6,minmax(0,1fr))',gap:'12px 2px',maxWidth:850,margin:'auto'}}>
- {places.map((p,i)=><button key={p.name} type="button" onClick={()=>onPick(p.key)} aria-label={'進入'+p.name} style={{gridColumn:i<3?'span 2':i===3?'2 / span 2':'4 / span 2',border:0,background:'transparent',color:'inherit',minWidth:0,padding:'3px 0',display:'flex',flexDirection:'column',alignItems:'center',cursor:'pointer',touchAction:'manipulation'}}>
+ {places.map((p,i)=><button key={p.name} type="button" onClick={()=>enter(p)} aria-label={'進入'+p.name} className={selected===p.name?'stock-island-active':''} style={{animation:selected===p.name?'stockSelect 260ms ease-out':undefined,position:'relative',zIndex:2,gridColumn:i<3?'span 2':i===3?'2 / span 2':'4 / span 2',border:0,background:'transparent',color:'inherit',minWidth:0,padding:'3px 0',display:'flex',flexDirection:'column',alignItems:'center',cursor:'pointer',touchAction:'manipulation'}}>
  <Island kind={p.kind}/><strong style={{display:'block',marginTop:7,padding:'5px 3px',border:'2px solid #b7a17e',background:'#263a4c',boxShadow:'2px 3px 0 #081c2d',fontSize:'clamp(10px,2.8vw,15px)',whiteSpace:'nowrap'}}>{p.name}</strong><small style={{display:'block',marginTop:7,color:'#d2d6d1',fontSize:'clamp(9px,2.2vw,12px)',lineHeight:1.4}}>{p.sub}</small></button>)}
  </div><footer style={{position:'relative',zIndex:1,textAlign:'center',fontSize:12,marginTop:22,color:'#d6c6a8'}}>⚓　點擊島嶼進入分析　⚓</footer></section>;
 }
